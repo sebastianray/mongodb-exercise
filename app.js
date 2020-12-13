@@ -28,6 +28,15 @@ const db = mongoose.connection;
 db.on("error", console.error.bind(console, "Connection Error"))
 db.once("open", () => console.log("Connected to MongoDB!"))
 
+// routes
+const studentRoutes = require('./routes/student')
+const errorHandler = require('./middlewares/errorHandler')
+
+app.use("/api/v1/index", (req,res) => res.status(200).json("Welcome!"))
+app.use("/api/v1/student", studentRoutes)
+
+app.use(errorHandler)
+
 //server
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Listening to ${PORT}`))
