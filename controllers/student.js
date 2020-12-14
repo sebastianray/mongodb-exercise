@@ -40,8 +40,8 @@ exports.Login = async (req, res, next) => {
     }
 }
 
-exports.GetAllStudents = async(req, res, next) => {
-    try{
+exports.GetAllStudents = async (req, res, next) => {
+    try {
         let data = await Student.find()
 
         res.status(200).json({
@@ -50,67 +50,63 @@ exports.GetAllStudents = async(req, res, next) => {
             data
         })
 
-    } catch(err) {
+    } catch (err) {
         next(err)
     }
 }
 
-exports.Edit = async(req, res, next) => {
+exports.Edit = async (req, res, next) => {
     try {
-        const {_id} = req.userData
+        const { _id } = req.userData
 
         // console.log(_id)
 
-        if (!_id) return next({message: "Missing ID Params"})
+        if (!_id) return next({ message: "Missing ID Params" })
 
         const student = await Student.findById(_id)
 
-        if (!student) return next({message: `There is no user with _id:${_id}`})
+        if (!student) return next({ message: `There is no user with _id:${_id}` })
 
-        const updateStudent = await Student.findByIdAndUpdate(_id, 
-          {$set: req.body},
-          {new: true, runValidators: true}
+        const updateStudent = await Student.findByIdAndUpdate(_id,
+            { $set: req.body },
+            { new: true, runValidators: true }
         )
 
         res.status(200).json({
             success: true,
             message: "Successfully update a student!",
             data: updateStudent,
-          });
+        });
 
-    } catch(err) {
+    } catch (err) {
         next(err)
     }
 }
 
-exports.Delete = async(req, res, next) => {
+exports.Delete = async (req, res, next) => {
     try {
-        const {_id} = req.userData
+        const { _id } = req.userData
 
         // console.log(_id)
 
-        if (!_id) return next({message: "Missing ID Params"})
+        if (!_id) return next({ message: "Missing ID Params" })
 
         const student = await Student.findById(_id)
 
         await Student.findByIdAndRemove(_id, (error, doc, result) => {
             if (error) return "Failed to delete student!"
-            if (!doc) return res.status(400).json({success:false, err: "Student not found!"})
-            
+            if (!doc) return res.status(400).json({ success: false, err: "Student not found!" })
+
             res.status(200).json({
                 success: true,
                 message: "Successfully delete a student!",
                 data: doc,
-              });
+            });
         })
 
-        res.status(200).json({
-            success: true,
-            message: "Successfully update a user!",
-            data: updateStudent,
-          });
 
-    } catch(err) {
+
+    } catch (err) {
         next(err)
     }
 }
