@@ -39,3 +39,18 @@ exports.Login = async (req, res, next) => {
         next(err)
     }
 }
+
+exports.GetAllStudents = async(req, res, next) => {
+    try{
+        let data = await Student.find()
+
+        res.status(200).json({
+            success: true,
+            message: "Successfully get all Students!",
+            data
+        })
+
+    } catch(err) {
+        next(err)
+    }
+}
