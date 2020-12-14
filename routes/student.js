@@ -7,5 +7,6 @@ const { Authentication } = require('../middlewares/auth')
 router.post("/register", studentController.Register)
 router.post("/login", studentController.Login)
 router.get("/all", Authentication, studentController.GetAllStudents)
+router.put("/edit",Authentication, studentController.Edit)
 
 module.exports = router;

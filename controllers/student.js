@@ -54,3 +54,31 @@ exports.GetAllStudents = async(req, res, next) => {
         next(err)
     }
 }
+
+exports.Edit = async(req, res, next) => {
+    try {
+        const {_id} = req.userData
+
+        // console.log(_id)
+
+        if (!_id) return next({message: "Missing ID Params"})
+
+        const student = await Student.findById(_id)
+
+        if (!student) return next({message: `There is no user with _id:${_id}`})
+
+        const updateStudent = await Student.findByIdAndUpdate(_id, 
+          {$set: req.body},
+          {new: true}
+        )
+
+        res.status(200).json({
+            success: true,
+            message: "Successfully update a user!",
+            data: updateStudent,
+          });
+
+    } catch(err) {
+        next(err)
+    }
+}
