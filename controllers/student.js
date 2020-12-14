@@ -69,8 +69,40 @@ exports.Edit = async(req, res, next) => {
 
         const updateStudent = await Student.findByIdAndUpdate(_id, 
           {$set: req.body},
-          {new: true}
+          {new: true, runValidators: true}
         )
+
+        res.status(200).json({
+            success: true,
+            message: "Successfully update a student!",
+            data: updateStudent,
+          });
+
+    } catch(err) {
+        next(err)
+    }
+}
+
+exports.Delete = async(req, res, next) => {
+    try {
+        const {_id} = req.userData
+
+        // console.log(_id)
+
+        if (!_id) return next({message: "Missing ID Params"})
+
+        const student = await Student.findById(_id)
+
+        await Student.findByIdAndRemove(_id, (error, doc, result) => {
+            if (error) return "Failed to delete student!"
+            if (!doc) return res.status(400).json({success:false, err: "Student not found!"})
+            
+            res.status(200).json({
+                success: true,
+                message: "Successfully delete a student!",
+                data: doc,
+              });
+        })
 
         res.status(200).json({
             success: true,
